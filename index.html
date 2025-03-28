@@ -182,8 +182,7 @@
 
     <script>
         function openViber() {
-            // Universal approach - try multiple formats for better compatibility
-            var viberUrl = "viber://chat?number=38348370370";
+            var viberUrl = "viber://add?number=38348370370";
             
             // Try to open Viber
             var viberWindow = window.open(viberUrl, '_blank');
@@ -194,9 +193,16 @@
             }
         }
         function openWhatsApp() {
-            // WhatsApp requires the country code with no plus sign in the URL
-            var whatsappUrl = "https://wa.me/38348370370";
-            window.location.href = whatsappUrl;
+            // Using the format from the screenshot: whatsapp://send?phone=...
+            var whatsappUrl = "whatsapp://send?phone=38348370370";
+            
+            // Try to open WhatsApp
+            var whatsappWindow = window.open(whatsappUrl, '_blank');
+            
+            // If window.open is blocked or returns null, try location.href
+            if (!whatsappWindow || whatsappWindow.closed || typeof whatsappWindow.closed === 'undefined') {
+                window.location.href = whatsappUrl;
+            }
         }
         function openPhone() {
             window.location.href = "tel:+38348370370";
