@@ -89,6 +89,8 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
+            text-decoration: none;
+            color: white;
         }
         .button::before {
             content: '';
@@ -106,7 +108,6 @@
         }
         .viber-button {
             background-color: #7A288A;
-            color: white;
         }
         .viber-button:hover {
             background-color: #8a309c;
@@ -159,15 +160,15 @@
 
     
     <div class="buttons">
-        <button class="button viber-button" onclick="openViber()">
+        <a href="viber://add?number=38348370370" class="button viber-button" id="viberBtn" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-viber"></i>
-        </button>
-        <button class="button whatsapp-button" onclick="openWhatsApp()">
+        </a>
+        <a href="whatsapp://send?phone=38348370370" class="button whatsapp-button" id="whatsappBtn" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-whatsapp"></i>
-        </button>
-        <button class="button phone-button" onclick="openPhone()">
+        </a>
+        <a href="tel:+38348370370" class="button phone-button" id="phoneBtn" target="_blank" rel="noopener noreferrer">
             <i class="fas fa-phone-alt"></i>
-        </button>
+        </a>
     </div>
     
     <div class="title">
@@ -183,38 +184,42 @@
     <script>
         function openViber() {
             var viberUrl = "viber://add?number=38348370370";
-            
-            // Try to open Viber
-            var viberWindow = window.open(viberUrl, '_blank');
-            
-            // If window.open is blocked or returns null, try location.href
-            if (!viberWindow || viberWindow.closed || typeof viberWindow.closed === 'undefined') {
-                window.location.href = viberUrl;
-            }
+            window.location.href = viberUrl;
+            setTimeout(function() {
+                if (!document.hidden) {
+                    document.getElementById('fallbackMessage').style.display = 'block';
+                }
+            }, 1000);
         }
-        
+
         function openWhatsApp() {
             var whatsappUrl = "whatsapp://send?phone=38348370370";
-            
-            // Try to open WhatsApp
-            var whatsappWindow = window.open(whatsappUrl, '_blank');
-            
-            // If window.open is blocked or returns null, try location.href
-            if (!whatsappWindow || whatsappWindow.closed || typeof whatsappWindow.closed === 'undefined') {
-                window.location.href = whatsappUrl;
-            }
+            window.location.href = whatsappUrl;
+            setTimeout(function() {
+                if (!document.hidden) {
+                    document.getElementById('fallbackMessage').style.display = 'block';
+                }
+            }, 1000);
         }
-        
+
         function openPhone() {
             window.location.href = "tel:+38348370370";
         }
-        
-        // Function to show fallback message if app doesn't open
-        function showFallbackAfterDelay() {
-            return setTimeout(function() {
-                document.getElementById('fallbackMessage').style.display = 'block';
-            }, 3000);
-        }
+
+        document.getElementById('viberBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            openViber();
+        });
+
+        document.getElementById('whatsappBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            openWhatsApp();
+        });
+
+        document.getElementById('phoneBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            openPhone();
+        });
         
         // Automatically redirect to Viber when the page loads
         window.onload = function() {
@@ -239,7 +244,11 @@
             // Automatically try to open Viber after a short delay
             setTimeout(function() {
                 // Set timeout to show fallback message if app doesn't open
-                var redirectTimeout = showFallbackAfterDelay();
+                var redirectTimeout = setTimeout(function() {
+                    if (!document.hidden) {
+                        document.getElementById('fallbackMessage').style.display = 'block';
+                    }
+                }, 1000);
                 sessionStorage.setItem('redirectTimeoutId', redirectTimeout);
                 
                 // Try to open Viber directly
