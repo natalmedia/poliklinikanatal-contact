@@ -175,31 +175,15 @@
         Nëse Viber nuk hapet, mund të klikoni butonin për të telefonuar ose na telefononi direkt në <a href="tel:+38348370370" style="color: #007bff;">+383 48 370 370</a>
     </div>
     
-    <div id="fallbackMessage" style="display: none; margin-top: 15px; padding: 10px 15px; background-color: #f8d7da; color: #721c24; border-radius: 5px; text-align: center; max-width: 90%; animation: fadeIn 0.5s ease-in-out;">
-        <p><i class="fas fa-exclamation-circle"></i> Duket se Viber nuk është i instaluar në pajisjen tuaj. Ju mund të përdorni WhatsApp ose të na telefononi direkt.</p>
-    </div>
-    
-
-
     <script>
         function openViber() {
             var viberUrl = "viber://add?number=38348370370";
             window.location.href = viberUrl;
-            setTimeout(function() {
-                if (!document.hidden) {
-                    document.getElementById('fallbackMessage').style.display = 'block';
-                }
-            }, 1000);
         }
 
         function openWhatsApp() {
             var whatsappUrl = "whatsapp://send?phone=38348370370";
             window.location.href = whatsappUrl;
-            setTimeout(function() {
-                if (!document.hidden) {
-                    document.getElementById('fallbackMessage').style.display = 'block';
-                }
-            }, 1000);
         }
 
         function openPhone() {
@@ -223,37 +207,8 @@
         
         // Automatically redirect to Viber when the page loads
         window.onload = function() {
-            // Clear any existing timeout if user returned to the page
-            if (sessionStorage.getItem('redirectTimeoutId')) {
-                clearTimeout(parseInt(sessionStorage.getItem('redirectTimeoutId')));
-            }
-            
-            // Hide fallback message on page load
-            if (document.getElementById('fallbackMessage')) {
-                document.getElementById('fallbackMessage').style.display = 'none';
-            }
-            
-            // Add click tracking for analytics
-            document.querySelectorAll('.button').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    console.log('Button clicked: ' + this.className);
-                    // Here you could add real analytics tracking
-                });
-            });
-            
-            // Automatically try to open Viber after a short delay
-            setTimeout(function() {
-                // Set timeout to show fallback message if app doesn't open
-                var redirectTimeout = setTimeout(function() {
-                    if (!document.hidden) {
-                        document.getElementById('fallbackMessage').style.display = 'block';
-                    }
-                }, 1000);
-                sessionStorage.setItem('redirectTimeoutId', redirectTimeout);
-                
-                // Try to open Viber directly
-                openViber();
-            }, 500);
+            // Automatically try to open Viber directly
+            openViber();
         };
     </script>
 </body>
