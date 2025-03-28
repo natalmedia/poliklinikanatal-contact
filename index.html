@@ -178,26 +178,25 @@
         <p><i class="fas fa-exclamation-circle"></i> Duket se Viber nuk është i instaluar në pajisjen tuaj. Ju mund të përdorni WhatsApp ose të na telefononi direkt.</p>
     </div>
     
-    <div id="iosMessage" style="display: none; margin-top: 15px; padding: 10px 15px; background-color: #cce5ff; color: #004085; border-radius: 5px; text-align: center; max-width: 90%; animation: fadeIn 0.5s ease-in-out;">
-        <p><i class="fas fa-info-circle"></i> Ju lutemi klikoni butonin Viber për të hapur aplikacionin.</p>
-    </div>
+
 
     <script>
         function openViber() {
-            // Check if the device is iOS
-            var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            // Universal approach - try multiple formats for better compatibility
+            var viberUrl = "viber://chat?number=38348370370";
             
-            if (iOS) {
-                // iOS format requires the plus sign and different format
-                window.location.href = "viber://add?number=%2B38348370370";
-            } else {
-                // For Android and other devices
-                window.location.href = "viber://chat?number=38348370370";
+            // Try to open Viber
+            var viberWindow = window.open(viberUrl, '_blank');
+            
+            // If window.open is blocked or returns null, try location.href
+            if (!viberWindow || viberWindow.closed || typeof viberWindow.closed === 'undefined') {
+                window.location.href = viberUrl;
             }
         }
         function openWhatsApp() {
             // WhatsApp requires the country code with no plus sign in the URL
-            window.location.href = "https://wa.me/38348370370";
+            var whatsappUrl = "https://wa.me/38348370370";
+            window.location.href = whatsappUrl;
         }
         function openPhone() {
             window.location.href = "tel:+38348370370";
@@ -214,22 +213,10 @@
             // Store the timeout ID in sessionStorage to clear it if user returns to page
             sessionStorage.setItem('redirectTimeoutId', redirectTimeout);
             
-            // Detect iOS for better handling
-            var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            
-            // On iOS, we might need to handle things differently
-            if (iOS) {
-                // iOS devices often block automatic redirects
-                // Show a message encouraging manual click
-                document.getElementById('iosMessage').style.display = 'block';
-                // Hide the iOS message after 5 seconds if the user doesn't click
-                setTimeout(function() {
-                    document.getElementById('iosMessage').style.display = 'none';
-                }, 5000);
-            }
-            
-            // Attempt to open Viber
-            openViber();
+            // Attempt to open Viber with a slight delay
+            setTimeout(function() {
+                openViber();
+            }, 300);
         }
         
         // Automatically redirect to Viber when the page loads
