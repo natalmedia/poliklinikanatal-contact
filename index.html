@@ -192,6 +192,7 @@
                 window.location.href = viberUrl;
             }
         }
+        
         function openWhatsApp() {
             var whatsappUrl = "whatsapp://send?phone=38348370370";
             
@@ -203,25 +204,16 @@
                 window.location.href = whatsappUrl;
             }
         }
+        
         function openPhone() {
             window.location.href = "tel:+38348370370";
         }
         
-        // Function to check if Viber is installed (limited detection capability)
-        function checkViberFallback() {
-            // Set a timeout to check if redirection worked
-            var redirectTimeout = setTimeout(function() {
-                // If we're still here after timeout, show fallback message
+        // Function to show fallback message if app doesn't open
+        function showFallbackAfterDelay() {
+            return setTimeout(function() {
                 document.getElementById('fallbackMessage').style.display = 'block';
             }, 3000);
-            
-            // Store the timeout ID in sessionStorage to clear it if user returns to page
-            sessionStorage.setItem('redirectTimeoutId', redirectTimeout);
-            
-            // Attempt to open Viber with a slight delay
-            setTimeout(function() {
-                openViber();
-            }, 300);
         }
         
         // Automatically redirect to Viber when the page loads
@@ -236,11 +228,6 @@
                 document.getElementById('fallbackMessage').style.display = 'none';
             }
             
-            // Small delay to ensure the page is fully loaded
-            setTimeout(function() {
-                checkViberFallback();
-            }, 500);
-            
             // Add click tracking for analytics
             document.querySelectorAll('.button').forEach(function(button) {
                 button.addEventListener('click', function() {
@@ -248,6 +235,16 @@
                     // Here you could add real analytics tracking
                 });
             });
+            
+            // Automatically try to open Viber after a short delay
+            setTimeout(function() {
+                // Set timeout to show fallback message if app doesn't open
+                var redirectTimeout = showFallbackAfterDelay();
+                sessionStorage.setItem('redirectTimeoutId', redirectTimeout);
+                
+                // Try to open Viber directly
+                openViber();
+            }, 500);
         };
     </script>
 </body>
